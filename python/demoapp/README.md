@@ -10,11 +10,13 @@ To run this project locally, follow these steps:
 
 3. Install the required dependencies:
       pip install tradingeconomics
+
       pip install flask
    
 
 4. Run the Flask application:
       cd demoapp/app
+
       python app.py
    
 
