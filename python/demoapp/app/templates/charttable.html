@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <title>GDP Data of two countries</title>
+    <style>
+    body{
+  margin: 0;
+  padding: 0;
+}
+h1{
+  text-align: center;
+}
+tr:nth-child(even){
+  background-color: #eeee;
+}
+th{
+ padding: 5px
+}
+table{
+  border-spacing: 0;
+  margin: 5px;
+  padding:5px;
+  text-align: center;
+  
+}
+tr:hover{
+  background-color: gray;
+  color: black
+}
+canvas {
+   width:100%;
+   height:100px;
+   text-align: center;
+}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+     <h1>Table that indicate two country GDP</h1>
+  <table id="data-table">
+    <tr>
+      <th>Country</th>
+      <th>Category</th>
+      <th>Date</th>
+      <th>Value</th>
+      <th>Frequency</th>
+      <th>HistoricalDataSymbol</th>
+      <th>LastUpdate</th>
+    </tr>
+    {% for item in data %}
+    <tr>
+      <td>{{ item.Country }}</td>
+      <td>{{ item.Category }}</td>
+      <td>{{ item.DateTime }}</td>
+      <td>{{ item.Value }}</td>
+      <td>{{ item.Frequency }}</td>
+      <td>{{ item.LastUpdate }}</td>
+      <td>{{ item.HistoricalDataSymbol }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  <h1>GDP chart  </h1>
+  <canvas id="myChart"   width="800" height="400" text-align: center></canvas>
+
+    <script>
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [
+                    {% for data in first_data %}
+                        "{{ data.DateTime }}",
+                    {% endfor %}
+                ],
+                datasets: [{
+                    label: 'Mexico',
+                    data: [
+                        {% for data in first_data %}
+                            {{ data.Value }},
+                        {% endfor %}
+                    ],
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }, {
+                    label: 'Sweden',
+                    data: [
+                        {% for data in second_data %}
+                            {{ data.Value }},
+                        {% endfor %}
+                    ],
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+</body>
+</html>
