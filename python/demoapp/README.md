@@ -4,23 +4,28 @@ This project is a Flask web application that allows users to compare the GDP (Gr
 To run this project locally, follow these steps:
 
 1. Clone the repository:
-      git clone https://github.com/Going244/tradingeconomics/edit/master/python/demoapp.git
+
+   git clone https://github.com/Going244/tradingeconomics/edit/master/python/demoapp.git
       
    
 
 3. Install the required dependencies:
-      pip install tradingeconomics
 
-      pip install flask
+   pip install tradingeconomics
+
+
+   pip install flask
    
 
-4. Run the Flask application:
-      cd demoapp/app
+5. Run the Flask application:
 
-      python app.py
+   cd demoapp/app
+
+
+   python app.py
    
 
-6. Open a web browser and go to http://localhost:5000 to access the application.
+7. Open a web browser and go to http://localhost:5000 to access the application.
 
 
  Usage
