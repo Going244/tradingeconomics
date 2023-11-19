@@ -5,18 +5,20 @@ To run this project locally, follow these steps:
 
 1. Clone the repository:
       git clone https://github.com/Going244/tradingeconomics/edit/master/python/demoapp.git
+      
    
 
-2. Install the required dependencies:
+3. Install the required dependencies:
       pip install tradingeconomics
       pip install flask
    
 
 4. Run the Flask application:
+      cd demoapp/app
       python app.py
    
 
-5. Open a web browser and go to http://localhost:5000 to access the application.
+6. Open a web browser and go to http://localhost:5000 to access the application.
 
 
  Usage
