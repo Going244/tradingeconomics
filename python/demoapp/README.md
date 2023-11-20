@@ -5,7 +5,7 @@ To run this project locally, follow these steps:
 
 <h2>1. Clone the repository: </h2>
 
-   git clone https://github.com/Going244/tradingeconomics.git
+   (git clone https://github.com/Going244/tradingeconomics.git) 
       
    
 
