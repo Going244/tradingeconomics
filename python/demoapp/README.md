@@ -11,7 +11,7 @@
 
 3. Install the required dependencies:
 
- ```  cd python/demoapp/app
+ `cd python/demoapp/app`
 
    pip install tradingeconomics
 
