@@ -1,4 +1,3 @@
-
 import tradingeconomics as te
 from flask import Flask, render_template, request
 
@@ -19,11 +18,15 @@ def fetch_data():
 
     data = te.getHistoricalData(country=first_country, indicator='gdp', initDate='2010-01-01')# Get the first selected country data from te api
     first_data = list(reversed(data))
+    first2 = first_data[:-1]
+    first_data2 = first_data[:1]
 
     data2 = te.getHistoricalData(country=second_country, indicator='gdp', initDate='2010-01-01')# Get the second selected country data from te api
     second_data = list(reversed(data2))
+    second2 = second_data[:-1]
+    second_data2 = second_data[:1]
 
-    return render_template('charttable.html', data=data1, first_data=first_data, second_data=second_data)# Render the data to a new HTML template called charttable.html
+    return render_template('charttable.html', data=data1, first_data=first_data, second_data=second_data, first_data2=first_data2, second_data2=second_data2, first2=first2, second2=second2)# Render the data to a new HTML template called charttable.html
 
 if __name__ == '__main__':
     app.run(debug=True)
