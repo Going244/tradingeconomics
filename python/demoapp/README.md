@@ -9,22 +9,22 @@
       
    
 
-3. Install the required dependencies:
+<h2>3. Install the required packages:</h2>
 
  `cd python/demoapp/app`
 
-   pip install tradingeconomics
+  ` pip install tradingeconomics`
 
 
-   pip install flask `
+  ` pip install flask `
    
 
-5. Run the Flask application:
+<h2>5. Run the Flask application:</h2>
 
   ` cd demoapp/app<br>python app.py `
    
 
-7. Open a web browser and go to http://localhost:5000 to access the application.
+<h2>7. Open a web browser and go to http://localhost:5000 to access the application.</h2>
 
 
 <h2> Usage </h2>
