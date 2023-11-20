@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,6 +20,7 @@ th{
  padding: 5px
 }
 table{
+width: 100%;
   border-spacing: 0;
   margin: 5px;
   padding:5px;
@@ -40,33 +40,34 @@ canvas {
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-     <h1>Table that indicate two country GDP</h1>
-  <table id="data-table">
-    <tr>
-      <th>Country</th>
-      <th>Category</th>
-      <th>Date</th>
-      <th>Value</th>
-      <th>Frequency</th>
-      <th>HistoricalDataSymbol</th>
-      <th>LastUpdate</th>
-    </tr>
-    {% for item in data %}
-    <tr>
-      <td>{{ item.Country }}</td>
-      <td>{{ item.Category }}</td>
-      <td>{{ item.DateTime }}</td>
-      <td>{{ item.Value }}</td>
-      <td>{{ item.Frequency }}</td>
-      <td>{{ item.LastUpdate }}</td>
-      <td>{{ item.HistoricalDataSymbol }}</td>
-    </tr>
-    {% endfor %}
-  </table>
-  <h1>GDP chart  </h1>
+     <h1>Table that indicate two country GDP {% for item in first_data2 %} {{item.Country }} {% endfor %} and {% for item in second_data2 %}  {{item.Country }} {% endfor %}</h1>
+  <div id="mytab" style="overflow-x: auto;width: 100%;"></div>
+  <h1>GDP chart of {% for item in first_data2 %} {{item.Country }} {% endfor %} and {% for item in second_data2 %}  {{item.Country }} {% endfor %}
+    </h1>
   <canvas id="myChart"   width="800" height="400" text-align: center></canvas>
 
     <script>
+        let jsonData = {{ data | tojson }};
+    let mytab = document.getElementById('mytab');
+    let table = document.createElement('table');
+    let tr = document.createElement('tr');
+    Object.keys(jsonData[0]).forEach((key) => {
+      let th = document.createElement('th');
+      th.innerHTML = key;
+      tr.appendChild(th);
+    });
+    table.appendChild(tr);
+
+    jsonData.forEach((data) => {
+      let tr = document.createElement('tr');
+      Object.values(data).forEach((value) => {
+        let td = document.createElement('td');
+        td.innerHTML = value;
+        tr.appendChild(td);
+      });
+      table.appendChild(tr);
+    });
+    mytab.appendChild(table);
         var ctx = document.getElementById('myChart').getContext('2d');
         var myChart = new Chart(ctx, {
             type: 'line',
@@ -77,18 +78,18 @@ canvas {
                     {% endfor %}
                 ],
                 datasets: [{
-                    label: 'Mexico',
+                    label: '{% for item in first_data2 %} {{item.Country }} {% endfor %}',
                     data: [
-                        {% for data in first_data %}
+                        {% for data in first2 %}
                             {{ data.Value }},
                         {% endfor %}
                     ],
                     borderColor: 'rgba(255, 99, 132, 1)',
                     borderWidth: 1
                 }, {
-                    label: 'Sweden',
+                    label: '{% for item in second_data2 %} {{item.Country }} {% endfor %}',
                     data: [
-                        {% for data in second_data %}
+                        {% for data in second2 %}
                             {{ data.Value }},
                         {% endfor %}
                     ],
