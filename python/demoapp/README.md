@@ -13,7 +13,7 @@ Clone the repository:
 Install the required packages:
 
 ```
-cd python/demoapp/app
+cd tradingeconomics/python/demoapp/app
 
 pip install tradingeconomics
 
