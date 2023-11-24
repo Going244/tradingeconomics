@@ -13,7 +13,7 @@ Clone the repository:
 Install the required packages:
 
 ```
-cd tradingeconomics/python/demoapp/app
+cd tradingeconomics/python/demoapp
 
 pip install tradingeconomics
 
@@ -23,7 +23,7 @@ pip install flask
 Run the Flask application:
 
   ```
-  cd demoapp/app
+  cd app
   python app.py
 
 ```
