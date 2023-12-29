@@ -34,11 +34,12 @@ Open a web browser and go to http://localhost:5000 to access the application.
 
 <h2> Usage </h2>
 
-<p>1. Select Country: On the home page, users will see a dropdown menu where they can select the country name for which they want to compare the GDP.
+1. Enter your API key 
+2. Select Country: On the home page, users will see a dropdown menu where they can select the country name for which they want to compare the economic.
 
-2. Fetch Data: After selecting the country, users can click on a "Fetch Data" button to retrieve the GDP data for the selected country.
+3. Select economic indicator
 
-3. View Comparison: Once the data is fetched, users will see a table displaying the GDP values for each year or time period, as well as a chart that visually compares the GDP trends of the selected country with another default country (e.g., Mexico and Sweden).</p>
+4. Click fetch data: Once the data is fetched, users will see a table displaying the economic indicator selected values for each year or time period, as well as a chart that visually compares the selected indicator trends of the selected country with another default country (e.g., Mexico and Sweden).</p>
 
 <h2> Project Structure</h2>
 
