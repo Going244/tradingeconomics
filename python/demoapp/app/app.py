@@ -5,29 +5,19 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('client.html')#Client side page to select country name
+    return render_template('client.html')  # Client side page to select country name, API key and indicator
 
-@app.route('/fetch_data', methods=['POST'])#page for fetched data in form table and chart
+@app.route('/fetch_data', methods=['POST'])  # Page for fetched data in form table and chart
 def fetch_data():
-    te.login('93a6bef24a10492:rp7gmj213iemy5i')
-    first_country = request.form['first_country']# Get the first country name from the form
-    second_country = request.form['second_country']# Get the second country name from the form
+    api = request.form['api']  # Get API to login
+    first_country = request.form['first_country']  # Get the first country name from the form
+    second_country = request.form['second_country']  # Get the second country name from the form
+    indicator_selected = request.form['indicator_selected']# Get a selected indictor
+    te.login(api)
+    data = te.getHistoricalData(country=[first_country, second_country], indicator=indicator_selected, initDate='2015-01-01')# Fetch the first and second selected country data from te api 
+    
 
-    data1 = te.getHistoricalData(country=[first_country, second_country], indicator='gdp', initDate='2015-01-01')# Get the first and second selected country data from te api
-    data1 = data1[1:]
-
-    data = te.getHistoricalData(country=first_country, indicator='gdp', initDate='2010-01-01')# Get the first selected country data from te api
-    first_data = list(reversed(data))
-    first2 = first_data[:-1]
-    first_data2 = first_data[:1]
-
-    data2 = te.getHistoricalData(country=second_country, indicator='gdp', initDate='2010-01-01')# Get the second selected country data from te api
-    second_data = list(reversed(data2))
-    second2 = second_data[:-1]
-    second_data2 = second_data[:1]
-
-    return render_template('charttable.html', data=data1, first_data=first_data, second_data=second_data, first_data2=first_data2, second_data2=second_data2, first2=first2, second2=second2)# Render the data to a new HTML template called charttable.html
+    return render_template('charttable.html', data=data)  # Render the data to a new HTML template called new.html
 
 if __name__ == '__main__':
     app.run(debug=True)
- 
