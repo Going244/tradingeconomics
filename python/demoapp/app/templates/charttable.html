@@ -1,112 +1,279 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="styles.css">
-    <title>GDP Data of two countries</title>
-    <style>
-    body{
-  margin: 0;
-  padding: 0;
-}
-h1{
-  text-align: center;
-}
-tr:nth-child(even){
-  background-color: #eeee;
-}
-th{
- padding: 5px
-}
-table{
-width: 100%;
-  border-spacing: 0;
-  margin: 5px;
-  padding:5px;
-  text-align: center;
-  
-}
-tr:hover{
-  background-color: gray;
-  color: black
-}
-canvas {
-   width:100%;
-   height:100px;
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <link rel="stylesheet" type="text/css" href="styles.css">
+ <title>Economic indicator of two countries</title>
+ <style>
+  body {
+   margin: 0;
+   padding: 0;
+   font-family: Arial, sans-serif;
+   
+  }
+
+  h1,p,h2{
    text-align: center;
+   margin: 15px;
+   color: #3366cc;
+  }
+
+  tr:nth-child(even) {
+   background-color: #eeee;
+  }
+    tr:nth-child(odd) {
+      background-color: rgba(242, 242, 242, 0.31);
+    }
+  th {
+   padding: 5px;
+   background-color:rgba(199, 207, 212, 1) ;
+   border-spacing: 0;
+  }
+
+  table {
+   width: 100%;
+   border-spacing: 0;
+   margin: 5px;
+   padding: 5px;
+   text-align: center;
+
+  }
+
+  tr:hover {
+   background-color: gray;
+   color: blue;
+  }
+ 
+#table{
+ height: auto;
+ width: 100%;
+ border: 1px solid rgba(31, 44, 36, 1);
+ box-sizing: border-box;
+ overflow-x: auto;
+ 
 }
-</style>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+.scroll-bar {
+ position: absolute;
+ bottom: -1;
+ height: 5px;
+ background-color: #7A8096ED;
+ 
+
+}
+.tables{
+ margin: 15px 5%;
+ width: 90%;
+ 
+}
+
+  canvas {
+   width: 400;
+   height: 400;
+   overflow-x: auto ;
+   text-align: center;
+  }
+      .chart-cointainer {
+  
+       display: inline-block;
+       margin: 100;
+       padding: 0;
+       align-self: center;
+       max-width: 500;
+  
+      }
+  
+      .select-chart {
+       display: flex;
+       justify-items: center;
+       height: 32px;
+       background-color: rgba(184, 186, 211, 1);
+       width: 100%;
+      }
+  
+ </style>
+ <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
-     <h1>Table that indicate two country GDP {% for item in first_data2 %} {{item.Country }} {% endfor %} and {% for item in second_data2 %}  {{item.Country }} {% endfor %}</h1>
-  <div id="mytab" style="overflow-x: auto;width: 100%;"></div>
-  <h1>GDP chart of {% for item in first_data2 %} {{item.Country }} {% endfor %} and {% for item in second_data2 %}  {{item.Country }} {% endfor %}
-    </h1>
-  <canvas id="myChart"   width="800" height="400" text-align: center></canvas>
+   <h1>Economic Indicator</h1>
+   <h2 id="table-title"></h2>
+<div class="tables">
+ <div id="table">
+ <div id="scrollBar" class="scroll-bar"></div> 
+ </div>
+</div>
+<h2 id="chart-title"></h2>
+    <div class="chart-cointainer">
+   <div class="select-chart">
+    <select id="chartType" onchange="createChart(this.value)">
+    <option value="line" selected>Line Chart</option>
+    <option value="bar">Bar Chart</option>
+    <option value="pie">Pie Chart</option>
+  </select>
+  </div>
+    <div class="chart">
+     <canvas id="myChart" width="300" height="300"> </canvas>
+    </div>
+    </div>
+<script> 
+const Data = {{ data | tojson }}
+var jsonData = Data.slice(1);
 
-    <script>
-        let jsonData = {{ data | tojson }};
-    let mytab = document.getElementById('mytab');
-    let table = document.createElement('table');
-    let tr = document.createElement('tr');
-    Object.keys(jsonData[0]).forEach((key) => {
-      let th = document.createElement('th');
-      th.innerHTML = key;
-      tr.appendChild(th);
-    });
-    table.appendChild(tr);
+jsonData.reverse()
+const h1 = document.getElementById('table-title')
+var country_name_1 = jsonData[0].Country //get first country name 
+var country_name_2 = jsonData[1].Country // get second selected country name 
+var category = jsonData[2]. Category // get category name 
 
-    jsonData.forEach((data) => {
-      let tr = document.createElement('tr');
-      Object.values(data).forEach((value) => {
-        let td = document.createElement('td');
-        td.innerHTML = value;
-        tr.appendChild(td);
-      });
-      table.appendChild(tr);
+h1.innerHTML= category + ' of '+ country_name_1+ ' and '+ country_name_2;
+const tablbox = document.getElementById('table');
+
+function createTable(data) {
+  const table = document.createElement('table');
+
+  // Create table header
+  const thead = table.createTHead();
+  const headerRow = thead.insertRow();
+  Object.keys(data[0]).forEach((key) => {
+    const th = document.createElement('th');
+    th.textContent = key;
+    headerRow.appendChild(th);
+  });
+
+  // Create table rows
+  const tbody = table.createTBody();
+  
+  let prevValues = {};
+  
+  data.forEach((obj) => {
+    const row = tbody.insertRow();
+    Object.entries(obj).forEach(([key, value]) => {
+      const cell = row.insertCell();
+      cell.textContent = value;
+      
+      if (key === 'Value' && prevValues[obj.Country] !== undefined) {
+        const prevValue = prevValues[obj.Country];
+        if (parseFloat(value) < prevValue) {
+          cell.style.color = 'red';
+        } else if (parseFloat(value) > prevValue) {
+          cell.style.color = 'green';
+        }
+      }
+      
+      if (key === 'Value') {
+        prevValues[obj.Country] = parseFloat(value);
+      }
     });
-    mytab.appendChild(table);
-        var ctx = document.getElementById('myChart').getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: [
-                    {% for data in first_data %}
-                        "{{ data.DateTime }}",
-                    {% endfor %}
-                ],
-                datasets: [{
-                    label: '{% for item in first_data2 %} {{item.Country }} {% endfor %}',
-                    data: [
-                        {% for data in first2 %}
-                            {{ data.Value }},
-                        {% endfor %}
-                    ],
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1
-                }, {
-                    label: '{% for item in second_data2 %} {{item.Country }} {% endfor %}',
-                    data: [
-                        {% for data in second2 %}
-                            {{ data.Value }},
-                        {% endfor %}
-                    ],
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                }
-            }
-        });
-    </script>
-</body>
+  });
+
+  return table;
+}
+
+// Append the table to the specified element
+document.getElementById('table').appendChild(createTable(jsonData));
+document.getElementById('table').addEventListener('scroll', function() {
+    const table = document.getElementById('table');
+    const scrollBar = document.getElementById('scrollBar');
+    const maxScrollLeft = table.scrollWidth - table.clientWidth;
+    const percentageScrolled = (table.scrollLeft / maxScrollLeft) * 90;
+    scrollBar.style.width = percentageScrolled + '%';
+  });
+  
+  //chart section
+  const h2 = document.getElementById('chart-title')
+  h2.innerHTML= category + ' of '+ country_name_1+ ' and '+ country_name_2 + ' chart'
+  
+  const first_country_data = jsonData.filter(item => item.Country === country_name_1).map(item => item.Value);// get first country Value data
+const second_country_data = jsonData.filter(item => item.Country === country_name_2).map(item => item.Value);// get second country Value data
+const dateString = jsonData.filter(item => item.Country === country_name_1).map(item => item.DateTime);//get DateTime 
+const year = dateString.map(dateString => {
+    const date = new Date(dateString);
+    return date.getFullYear();
+});
+
+console.log(year); 
+
+// Create a line chart when the browser is opened
+let chartType = "line";
+
+let chart = new Chart(document.getElementById('myChart'), {
+  type: 'line',
+  data: {
+    labels: year,
+    datasets: [{
+      label: country_name_1,
+      data: first_country_data,
+      borderColor: 'blue',
+      borderWidth: 1
+    },
+    {
+      label: country_name_2,
+      data: second_country_data,
+      borderColor: 'green',
+      borderWidth: 1
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false
+  }
+});
+
+// Function to destroy the old chart and create a new one based on the selected type
+function createChart(type) {
+  if (chart) {
+    chart.destroy();
+  }
+let data3 = {
+    labels: year,
+    datasets: [{
+      label: country_name_1,
+      data: first_country_data,
+      borderColor: 'blue',
+      borderWidth: 1
+    },
+    {
+      label: country_name_2,
+      data: second_country_data,
+      backgroundColor: 'green',borderColor:'green',
+      borderWidth: 1
+    }]
+  };
+
+
+//selection of chart from drop-down option 
+  if (type === "line") {
+    chart = new Chart(document.getElementById('myChart'), {
+      type: 'line',
+      data: data3,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false
+      }
+    });
+  } else if (type === "bar") {
+    chart = new Chart(document.getElementById('myChart'), {
+      type: 'bar',
+      data: data3,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false
+      }
+    });
+  } else if (type === "pie") {
+    chart = new Chart(document.getElementById('myChart'), {
+      type: 'pie',
+      data: data3,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false
+      }
+    });
+  }
+}
+
+ </script>
+ </body>
 </html>
